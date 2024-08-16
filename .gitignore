@@ -1,0 +1,4 @@
+# initialize a git repository, but don't want the node modules folder / .env to go in.
+
+node_modules
+.env
