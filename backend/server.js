@@ -1,10 +1,14 @@
 // entry point to our server
 
 const express = require('express')
+const colors = require('colors')
 const dotenv = require('dotenv').config()
 const {errorHandler} = require('./middleware/errorMiddleware')
+const connectDB = require('./config/db')
 // process.env.PORT is at .env file
 const port = process.env.PORT || 6000
+
+connectDB()
 
 const app = express()
 
