@@ -18,6 +18,7 @@ app.use(express.urlencoded({extended: false}))
 
 // if hits '/api/goals', it's going to look at 'goalRoutes.js' file router.get...
 app.use('/api/goals', require('./routes/goalRoutes'))
+app.use('/api/users', require('./routes/userRoutes'))
 
 app.use(errorHandler)
 

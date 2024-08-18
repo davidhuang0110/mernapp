@@ -1,3 +1,4 @@
+// middleware is the function that runs during the request response cycle 
 // for the status(400) error
 
 const errorHandler = (err, req, res, next) => {
