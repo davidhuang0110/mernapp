@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react"
+// useSelector is to select something from the state
+// useDispatch is to dispatch function like register, async thunk function or reset function in reducer
+import {useSelector, useDispatch} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
+import {toast} from 'react-toastify'
 import {FaUser} from 'react-icons/fa'
+import {register, reset} from '../features/auth/authSlice'
+import Spinner from '../components/Spinner'         // for isLoading
 
 function Register() {
     const [formData, setFormData] = useState({
@@ -11,6 +18,31 @@ function Register() {
 
     const{name, email, password, password2} = formData
 
+    const navigate = useNavigate()
+    // used to dispatch the function
+    const dispatch = useDispatch()
+
+    // select what we want from the state
+    const {user, isLoading, isError, isSuccess, message} = useSelector( 
+        (state) => state.auth
+    )
+
+    useEffect(() => {
+        // check for an error
+        if(isError) {
+            toast.error(message)
+        }
+
+        // "user" is mean if registered or logged in, then that user will include token or something
+        // and redirected
+        if(isSuccess || user) {
+            navigate('/')
+        }
+
+        dispatch(reset())
+
+    }, [user, isError, isSuccess, message, navigate, dispatch])
+
     // let the textbox(name, email, password, password2) to change
     const onChange =(e) => {
         setFormData((prevState) => ({
@@ -19,8 +51,28 @@ function Register() {
         }))
     }
 
+    // this is where we want to dispatch our register
     const onSubmit =(e) => {
         e.preventDefault()
+
+        // check the password match or not
+        if(password !== password2) {
+            toast.error('Passwords do not match')
+        }
+        else {
+            const userData = {
+                name,
+                email,
+                password,
+            }
+
+            // passing the register function(in authSlice.js)
+            dispatch(register(userData))
+        }
+    }
+
+    if(isLoading) {
+        return <Spinner />
     }
 
     return (
